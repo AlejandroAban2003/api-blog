@@ -10,6 +10,7 @@ import userRoute from './routes/user.routes.js';
 import roleRoute from './routes/roles.routes.js';
 import commentRoute from './routes/comment.routes.js';
 import postRoute from './routes/post.routes.js';
+import eventRoute from './routes/event.routes.js'
 import { verifyToken } from './middleware/verifyToken.js'; // Importa el middleware de autenticación
 
 const app = express();
@@ -32,6 +33,7 @@ app.use('/api', userRoute);
 app.use('/api', roleRoute);
 app.use('/api', commentRoute);
 app.use('/api', postRoute);
+app.use('/api', eventRoute)
 
 // Middleware para manejar rutas protegidas con autenticación
 app.use('/api', verifyToken); // Monta el middleware para todas las rutas que lo necesiten
@@ -43,5 +45,15 @@ app.use('/api', userRoute); // Ejemplo, ajusta según las rutas protegidas que t
 app.use((req, res) => {
   res.status(404).json('Ruta no encontrada');
 });
+
+app.get('/api/eventos', async (req, res) => {
+  try {
+    const eventos = await eventos.find(); // Asegúrate de que tu modelo Evento tiene las coordenadas
+    res.json({ eventos });
+  } catch (error) {
+    res.status(500).send("Error al obtener los eventos");
+  }
+});
+
 
 export default app;
